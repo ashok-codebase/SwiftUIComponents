@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftUI Snippets</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⌘</span>
+        <span class="logo-text">SwiftUI <span class="logo-accent">Snippets</span></span>
+      </div>
+      <nav class="header-nav">
+        <a href="#" class="nav-link active" data-filter="all">All</a>
+        <a href="#" class="nav-link" data-filter="layout">Layout</a>
+        <a href="#" class="nav-link" data-filter="controls">Controls</a>
+        <a href="#" class="nav-link" data-filter="animation">Animation</a>
+        <a href="#" class="nav-link" data-filter="navigation">Navigation</a>
+        <a href="#" class="nav-link" data-filter="styling">Styling</a>
+        <a href="#" class="nav-link nav-constants" data-filter="constants">Constants</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search snippets…" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-badge">Swift 5.9 · iOS 17 · macOS 14</p>
+      <h1 class="hero-title">SwiftUI Components<br />&amp; Code Snippets</h1>
+      <p class="hero-sub">Live preview + copy-ready code. Switch between <strong>Preview</strong> and <strong>Code</strong> on any card.</p>
+      <div class="hero-stats">
+        <span class="stat"><strong id="totalCount">0</strong> snippets</span>
+        <span class="stat-sep">·</span>
+        <span class="stat"><strong>6</strong> categories</span>
+        <span class="stat-sep">·</span>
+        <span class="stat">Free forever</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="main">
+    <div class="grid" id="snippetGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <span class="empty-icon">🔍</span>
+      <p>No snippets match your search.</p>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8l3.5 3.5 6.5-7" stroke="#27c93f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Copied to clipboard!
+  </div>
+
+<script src="snippets.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
