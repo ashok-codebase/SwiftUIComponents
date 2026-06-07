@@ -5,12 +5,52 @@
   const searchInput = document.getElementById('searchInput');
   const navLinks = document.querySelectorAll('.nav-link');
   const toast = document.getElementById('toast');
+  const platTabs = document.querySelectorAll('.plat-tab');
+  const heroBadge = document.getElementById('heroBadge');
+  const heroTitle = document.getElementById('heroTitle');
+  const logoIcon = document.getElementById('logoIcon');
+  const logoText = document.getElementById('logoText');
 
   let activeFilter = 'all';
   let searchQuery = '';
+  let activePlatform = 'ios';
   let toastTimer = null;
 
+  function currentSnippets() {
+    return activePlatform === 'android' ? ANDROID_SNIPPETS : SNIPPETS;
+  }
+
   totalCount.textContent = SNIPPETS.length;
+
+  platTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      platTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activePlatform = tab.dataset.platform;
+
+      if (activePlatform === 'android') {
+        heroBadge.textContent = 'Kotlin · Android 14 · Jetpack Compose';
+        heroTitle.innerHTML = 'Jetpack Compose<br />&amp; Code Snippets';
+        logoIcon.textContent = '🤖';
+        logoText.innerHTML = 'Compose <span class="logo-accent">Snippets</span>';
+        document.title = 'Android Compose Snippets';
+      } else {
+        heroBadge.textContent = 'Swift 5.9 · iOS 17 · macOS 14';
+        heroTitle.innerHTML = 'SwiftUI Components<br />&amp; Code Snippets';
+        logoIcon.textContent = '⌘';
+        logoText.innerHTML = 'SwiftUI <span class="logo-accent">Snippets</span>';
+        document.title = 'iOS & Android Snippets';
+      }
+
+      totalCount.textContent = currentSnippets().length;
+      activeFilter = 'all';
+      searchQuery = '';
+      searchInput.value = '';
+      navLinks.forEach(l => l.classList.remove('active'));
+      navLinks[0].classList.add('active');
+      render();
+    });
+  });
 
   function buildCard(snippet) {
     const card = document.createElement('div');
@@ -19,6 +59,10 @@
 
     const tags = snippet.tags.map(t => `<span class="tag">${t}</span>`).join('');
     const isConst = snippet.category === 'constants';
+    const isAndroid = activePlatform === 'android';
+    const langLabel = isAndroid
+      ? (isConst ? 'Kotlin · Export' : 'Kotlin')
+      : (isConst ? 'Swift · Export' : 'Swift');
 
     card.innerHTML = `
       <div class="card-header">
@@ -50,7 +94,7 @@
             <span class="dot dot-y"></span>
             <span class="dot dot-g"></span>
           </div>
-          <span class="code-lang">${isConst ? 'Swift · Export' : 'Swift'}</span>
+          <span class="code-lang">${langLabel}</span>
           <button class="copy-btn" aria-label="Copy code">
             <svg viewBox="0 0 16 16" fill="none">
               <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
@@ -111,7 +155,8 @@
 
   function render() {
     const q = searchQuery.toLowerCase();
-    const visible = SNIPPETS.filter(s => {
+    const snippets = currentSnippets();
+    const visible = snippets.filter(s => {
       const matchCat = activeFilter === 'all' || s.category === activeFilter;
       const matchQ = !q ||
         s.title.toLowerCase().includes(q) ||

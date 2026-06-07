@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SwiftUI Snippets</title>
+  <title>iOS & Android Snippets</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="header">
     <div class="header-inner">
       <div class="logo">
-        <span class="logo-icon">⌘</span>
-        <span class="logo-text">SwiftUI <span class="logo-accent">Snippets</span></span>
+        <span class="logo-icon" id="logoIcon">⌘</span>
+        <span class="logo-text" id="logoText">SwiftUI <span class="logo-accent">Snippets</span></span>
       </div>
       <nav class="header-nav">
         <a href="#" class="nav-link active" data-filter="all">All</a>
@@ -27,18 +27,22 @@
           <svg class="search-icon" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <input type="text" id="searchInput" class="search-input" placeholder="Search snippets…" />
         </div>
-        <button class="gen-btn" id="generatorToggle">
-          <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M8 2v3M8 11v3M2 8h3M11 8h3M4.22 4.22l2.12 2.12M9.66 9.66l2.12 2.12M4.22 11.78l2.12-2.12M9.66 6.34l2.12-2.12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Generator
-        </button>
       </div>
     </div>
   </header>
 
   <section class="hero">
     <div class="hero-inner">
-      <p class="hero-badge">Swift 5.9 · iOS 17 · macOS 14</p>
-      <h1 class="hero-title">SwiftUI Components<br />&amp; Code Snippets</h1>
+      <div class="platform-tabs">
+        <button class="plat-tab active ios" data-platform="ios">
+          <span class="plat-icon">🍎</span> iOS · SwiftUI
+        </button>
+        <button class="plat-tab android" data-platform="android">
+          <span class="plat-icon">🤖</span> Android · Compose
+        </button>
+      </div>
+      <p class="hero-badge" id="heroBadge">Swift 5.9 · iOS 17 · macOS 14</p>
+      <h1 class="hero-title" id="heroTitle">SwiftUI Components<br />&amp; Code Snippets</h1>
       <p class="hero-sub">Live preview + copy-ready code. Switch between <strong>Preview</strong> and <strong>Code</strong> on any card.</p>
       <div class="hero-stats">
         <span class="stat"><strong id="totalCount">0</strong> snippets</span>
@@ -49,9 +53,6 @@
       </div>
     </div>
   </section>
-
-  <!-- ── Generator Panel (built dynamically by generator.js) ── -->
-  <section class="generator" id="generatorPanel" style="display:none;"></section>
 
   <main class="main" id="snippetsMain">
     <div class="grid" id="snippetGrid"></div>
@@ -67,7 +68,7 @@
   </div>
 
   <script src="snippets.js"></script>
+  <script src="android-snippets.js"></script>
   <script src="app.js"></script>
-  <script src="generator.js"></script>
 </body>
 </html>
