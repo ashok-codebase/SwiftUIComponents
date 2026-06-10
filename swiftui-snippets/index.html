@@ -3,67 +3,597 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iOS & Android Snippets</title>
+  <title>DevCraft · SwiftUI &amp; Compose</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <header class="header">
-    <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon" id="logoIcon">⌘</span>
-        <span class="logo-text" id="logoText">SwiftUI <span class="logo-accent">Snippets</span></span>
+<body class="platform-ios" id="portal">
+
+  <!-- ════════════════════════════════════════════════
+       TOP NAV
+  ════════════════════════════════════════════════ -->
+  <header class="topnav">
+    <div class="topnav-inner">
+
+      <!-- Logo -->
+      <div class="nav-logo" onclick="showSection('overview')" role="button" tabindex="0" aria-label="DevCraft home">
+        <div class="logo-mark" id="logo-mark">D</div>
+        <span class="logo-text">DevCraft</span>
       </div>
-      <nav class="header-nav">
-        <a href="#" class="nav-link active" data-filter="all">All</a>
-        <a href="#" class="nav-link" data-filter="layout">Layout</a>
-        <a href="#" class="nav-link" data-filter="controls">Controls</a>
-        <a href="#" class="nav-link" data-filter="animation">Animation</a>
-        <a href="#" class="nav-link" data-filter="navigation">Navigation</a>
-        <a href="#" class="nav-link" data-filter="styling">Styling</a>
-        <a href="#" class="nav-link nav-constants" data-filter="constants">Constants</a>
+
+      <!-- Centre links -->
+      <nav class="nav-links" aria-label="Main navigation">
+        <a class="nav-link" data-section="snippets" data-filter="all" role="button" tabindex="0">Snippets</a>
+        <a class="nav-link" data-section="arch"     role="button" tabindex="0">Architecture</a>
+        <a class="nav-link" data-section="standards" role="button" tabindex="0">Standards</a>
+        <a class="nav-link" data-section="review"   role="button" tabindex="0">Code Review</a>
       </nav>
-      <div class="header-actions">
+
+      <!-- Right: platform toggle + search -->
+      <div class="nav-right">
+        <div class="ptoggle" role="group" aria-label="Platform">
+          <button class="ptoggle-btn active" id="btn-ios"  data-platform="ios">
+            <i class="ti ti-brand-apple" aria-hidden="true"></i> SwiftUI
+          </button>
+          <button class="ptoggle-btn" id="btn-and" data-platform="android">
+            <i class="ti ti-brand-android" aria-hidden="true"></i> Compose
+          </button>
+        </div>
         <div class="search-wrap">
-          <svg class="search-icon" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <input type="text" id="searchInput" class="search-input" placeholder="Search snippets…" />
+          <i class="ti ti-search search-icon" aria-hidden="true"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search docs" aria-label="Search snippets" />
+          <kbd class="search-kbd">⌘K</kbd>
         </div>
       </div>
+
     </div>
   </header>
 
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="platform-tabs">
-        <button class="plat-tab active ios" data-platform="ios">
-          <span class="plat-icon">🍎</span> iOS · SwiftUI
-        </button>
-        <button class="plat-tab android" data-platform="android">
-          <span class="plat-icon">🤖</span> Android · Compose
-        </button>
-      </div>
-      <p class="hero-badge" id="heroBadge">Swift 5.9 · iOS 17 · macOS 14</p>
-      <h1 class="hero-title" id="heroTitle">SwiftUI Components<br />&amp; Code Snippets</h1>
-      <p class="hero-sub">Live preview + copy-ready code. Switch between <strong>Preview</strong> and <strong>Code</strong> on any card.</p>
-      <div class="hero-stats">
-        <span class="stat"><strong id="totalCount">0</strong> snippets</span>
-        <span class="stat-sep">·</span>
-        <span class="stat"><strong>6</strong> categories</span>
-        <span class="stat-sep">·</span>
-        <span class="stat">Free forever</span>
-      </div>
-    </div>
-  </section>
+  <!-- ════════════════════════════════════════════════
+       PAGE LAYOUT
+  ════════════════════════════════════════════════ -->
+  <div class="page-layout">
 
-  <main class="main" id="snippetsMain">
-    <div class="grid" id="snippetGrid"></div>
-    <div class="empty-state" id="emptyState" style="display:none;">
-      <span class="empty-icon">🔍</span>
-      <p>No snippets match your search.</p>
-    </div>
-  </main>
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar" aria-label="Page navigation">
 
+      <div class="sb-section">
+        <div class="sb-label">Overview</div>
+        <div class="sb-item active" data-section="overview" role="button" tabindex="0">Welcome</div>
+        <div class="sb-item" data-section="snippets" data-filter="all" role="button" tabindex="0">Code Snippets</div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label" id="sb-track-label">SwiftUI Track</div>
+        <div class="sb-item" data-section="snippets" data-filter="layout" role="button" tabindex="0">
+          Layout <span class="sb-count">12</span>
+        </div>
+        <div class="sb-item" data-section="snippets" data-filter="controls" role="button" tabindex="0">
+          Controls <span class="sb-count">21</span>
+        </div>
+        <div class="sb-item" data-section="snippets" data-filter="animation" role="button" tabindex="0">
+          Animation <span class="sb-count">7</span>
+        </div>
+        <div class="sb-item" data-section="snippets" data-filter="navigation" role="button" tabindex="0">
+          Navigation <span class="sb-count">6</span>
+        </div>
+        <div class="sb-item" data-section="snippets" data-filter="styling" role="button" tabindex="0">
+          Styling <span class="sb-count">6</span>
+        </div>
+        <div class="sb-item" data-section="snippets" data-filter="constants" role="button" tabindex="0">
+          Constants <span class="sb-count">5</span>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Architecture</div>
+        <div class="sb-item" data-section="arch" role="button" tabindex="0" id="sb-arch-link">iOS Architecture</div>
+        <div class="sb-item" data-section="standards" role="button" tabindex="0">Design Patterns</div>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Quality</div>
+        <div class="sb-item" data-section="standards" role="button" tabindex="0">Coding Standards</div>
+        <div class="sb-item" data-section="review" role="button" tabindex="0">Best Practices</div>
+        <div class="sb-item" data-section="review" role="button" tabindex="0">Code Review</div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="main-content" id="mainContent">
+
+      <!-- ══ OVERVIEW ══ -->
+      <div id="section-overview" class="content-section">
+
+        <div class="hero">
+          <span class="hero-badge" id="hero-badge">DEVCRAFT · iOS TRACK</span>
+          <h1 class="hero-heading">The complete learning hub<br>for SwiftUI &amp; Jetpack Compose.</h1>
+          <p class="hero-desc">57 real-world components with live preview and copy-ready code — plus architecture patterns, coding standards, and code review checklists for both iOS and Android engineers.</p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="showSection('snippets','all')">Browse Snippets <span aria-hidden="true">→</span></button>
+            <button class="btn-outline" onclick="showSection('arch')">View Architecture</button>
+          </div>
+        </div>
+
+        <!-- Featured track card -->
+        <div class="featured-card">
+          <div class="feat-left">
+            <span class="feat-tag">FEATURED TRACK</span>
+            <h2 class="feat-title" id="feat-title">SwiftUI</h2>
+            <p class="feat-body" id="feat-body">Master SwiftUI's declarative model: views &amp; state, layout system, animations, navigation stacks, and composable view modifiers — 57 annotated examples.</p>
+            <button class="feat-link" onclick="showSection('snippets','layout')">
+              Explore snippets <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <div class="feat-right">
+            <div class="ced">
+              <div class="ced-header">
+                <div class="ced-dots">
+                  <span class="dot dot-r"></span>
+                  <span class="dot dot-y"></span>
+                  <span class="dot dot-g"></span>
+                </div>
+                <span class="ced-filename" id="ced-filename">TRANSACTIONROW.SWIFT</span>
+                <button class="ced-copy-btn" data-target="ced-ios" aria-label="Copy code">
+                  <i class="ti ti-copy" aria-hidden="true"></i> Copy
+                </button>
+              </div>
+              <div class="ced-body">
+
+                <!-- iOS code preview -->
+                <div class="ios-only" id="ced-ios">
+<div class="cl"><span class="ln">01</span><span class="kw">@Observable</span></div>
+<div class="cl"><span class="ln">02</span><span class="kw">final class</span> <span class="ty">FeedModel</span> {</div>
+<div class="cl"><span class="ln">03</span>    <span class="kw">var</span> posts: [<span class="ty">Post</span>] = []</div>
+<div class="cl"><span class="ln">04</span>    <span class="kw">func</span> <span class="fn">load</span>() <span class="kw">async</span> {</div>
+<div class="cl"><span class="ln">05</span>        posts = <span class="kw">await</span> api.<span class="fn">fetchPosts</span>()</div>
+<div class="cl"><span class="ln">06</span>    }</div>
+<div class="cl"><span class="ln">07</span>}</div>
+<div class="cl"><span class="ln">08</span></div>
+<div class="cl"><span class="ln">09</span><span class="kw">struct</span> <span class="ty">FeedView</span>: <span class="ty">View</span> {</div>
+<div class="cl"><span class="ln">10</span>    <span class="kw">@State private var</span> model = <span class="ty">FeedModel</span>()</div>
+<div class="cl"><span class="ln">11</span>    <span class="kw">var</span> body: <span class="kw">some</span> <span class="ty">View</span> {</div>
+<div class="cl"><span class="ln">12</span>        <span class="ty">List</span>(model.posts) { <span class="ty">Text</span>(<span class="pa">$0</span>.title) }</div>
+<div class="cl"><span class="ln">13</span>            .task { <span class="kw">await</span> model.<span class="fn">load</span>() }</div>
+<div class="cl"><span class="ln">14</span>    }</div>
+<div class="cl"><span class="ln">15</span>}</div>
+                </div>
+
+                <!-- Android code preview -->
+                <div class="android-only" id="ced-android" style="display:none">
+<div class="cl"><span class="ln">01</span><span class="kw">@HiltViewModel</span></div>
+<div class="cl"><span class="ln">02</span><span class="kw">class</span> <span class="ty">FeedViewModel</span> <span class="kw">@Inject constructor</span>(</div>
+<div class="cl"><span class="ln">03</span>    <span class="kw">private val</span> repo: <span class="ty">FeedRepository</span></div>
+<div class="cl"><span class="ln">04</span>) : <span class="ty">ViewModel</span>() {</div>
+<div class="cl"><span class="ln">05</span>    <span class="kw">val</span> posts = repo.<span class="fn">getPosts</span>().<span class="fn">stateIn</span>(</div>
+<div class="cl"><span class="ln">06</span>        viewModelScope,</div>
+<div class="cl"><span class="ln">07</span>        SharingStarted.<span class="fn">WhileSubscribed</span>(<span class="nu">5000</span>),</div>
+<div class="cl"><span class="ln">08</span>        <span class="fn">emptyList</span>()</div>
+<div class="cl"><span class="ln">09</span>    )</div>
+<div class="cl"><span class="ln">10</span>}</div>
+<div class="cl"><span class="ln">11</span></div>
+<div class="cl"><span class="ln">12</span><span class="kw">@Composable</span></div>
+<div class="cl"><span class="ln">13</span><span class="kw">fun</span> <span class="fn">FeedScreen</span>(vm: <span class="ty">FeedViewModel</span> = <span class="fn">hiltViewModel</span>()) {</div>
+<div class="cl"><span class="ln">14</span>    <span class="kw">val</span> posts <span class="kw">by</span> vm.posts.<span class="fn">collectAsStateWithLifecycle</span>()</div>
+<div class="cl"><span class="ln">15</span>    <span class="ty">LazyColumn</span> { <span class="fn">items</span>(posts) { <span class="fn">PostRow</span>(it) } }</div>
+<div class="cl"><span class="ln">16</span>}</div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /section-overview -->
+
+      <!-- ══ SNIPPETS ══ -->
+      <div id="section-snippets" class="content-section" style="display:none">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow" id="snippets-eyebrow">All Snippets</div>
+            <h1 class="section-title" id="snippets-title">All Snippets</h1>
+            <p class="section-sub" id="snippets-sub">57 copy-ready SwiftUI examples with live preview</p>
+          </div>
+        </div>
+        <div class="grid" id="snippetGrid"></div>
+        <div class="empty-state" id="emptyState" style="display:none">
+          <i class="ti ti-search" style="font-size:36px;color:#9CA3AF;display:block;margin-bottom:12px" aria-hidden="true"></i>
+          <p>No snippets match your search.</p>
+        </div>
+      </div>
+
+      <!-- ══ CODING STANDARDS ══ -->
+      <div id="section-standards" class="content-section" style="display:none">
+        <div class="section-eyebrow">Quality</div>
+        <h1 class="section-title">Coding standards</h1>
+        <p class="section-sub" id="standards-sub">Naming conventions, file structure &amp; DRY principles — SwiftUI edition</p>
+
+        <!-- iOS Standards -->
+        <div class="platform-content ios-only">
+          <div class="rule-head">Naming rules</div>
+          <div class="rule-list">
+            <div class="rule-item">
+              <div class="rule-title">Views — noun phrase, no "View" suffix</div>
+              <div class="rule-desc">Use <code class="ic ic-accent">TransactionList</code>, not <code class="ic ic-muted">TransactionListView</code> — redundant with the struct context</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">ViewModels — "ViewModel" suffix, never "Manager"</div>
+              <div class="rule-desc"><code class="ic ic-accent">LoginViewModel</code> is clear; <code class="ic ic-muted">LoginManager</code> is ambiguous</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">Booleans — is / has / should prefix</div>
+              <div class="rule-desc"><code class="ic ic-accent">isLoading</code>, <code class="ic ic-accent">hasError</code>, <code class="ic ic-accent">shouldRefresh</code></div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">Extensions — group by protocol or concern in separate files</div>
+              <div class="rule-desc"><code class="ic ic-accent">Date+Formatting.swift</code>, <code class="ic ic-accent">View+ErrorAlert.swift</code></div>
+            </div>
+          </div>
+
+          <div class="rule-head">Do / Don't</div>
+          <div class="do-dont">
+            <div class="do-card">
+              <div class="dd-label">✓ do</div>
+              <pre><span class="kw">@Published</span> <span class="kw">var</span> isLoading = <span class="nu">false</span>
+
+<span class="kw">func</span> <span class="fn">fetchTransactions</span>() <span class="kw">async</span> {
+  isLoading = <span class="nu">true</span>
+  <span class="kw">defer</span> { isLoading = <span class="nu">false</span> }
+  <span class="cm">// ...</span>
+}</pre>
+            </div>
+            <div class="dont-card">
+              <div class="dd-label">✗ don't</div>
+              <pre><span class="cm">// primitive flag, no async</span>
+<span class="kw">var</span> loading = <span class="nu">false</span>
+
+<span class="kw">func</span> <span class="fn">getData</span>() {
+  loading = <span class="nu">true</span>
+  <span class="cm">// no defer</span>
+}</pre>
+            </div>
+          </div>
+
+          <div class="rule-head">File structure</div>
+          <div class="edu-code-card">
+            <div class="edu-code-header">
+              <span class="edu-code-filename">Recommended layout</span>
+              <span class="lang-badge badge-ios">Swift</span>
+            </div>
+            <div class="edu-code-body"><span class="cm">// App/</span>
+<span class="cm">//  ├── Core/          → utilities, extensions</span>
+<span class="cm">//  ├── Features/      → one folder per feature</span>
+<span class="cm">//  │    └── Login/</span>
+<span class="cm">//  │         ├── LoginView.swift</span>
+<span class="cm">//  │         ├── LoginViewModel.swift</span>
+<span class="cm">//  │         └── LoginModel.swift</span>
+<span class="cm">//  ├── Services/      → API, persistence</span>
+<span class="cm">//  └── Resources/     → assets, localisation</span></div>
+          </div>
+
+          <div class="rule-head">Key patterns</div>
+          <div class="rule-list">
+            <div class="rule-item">
+              <div class="rule-title">@MainActor on all ViewModels</div>
+              <div class="rule-desc">Guarantees @Published updates happen on the main thread — no manual <code class="ic ic-accent">DispatchQueue.main.async</code></div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">Protocol-driven services</div>
+              <div class="rule-desc">Define <code class="ic ic-accent">protocol TransactionServiceProtocol</code> so ViewModels can be unit-tested with mock services</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">@ViewBuilder for sub-components</div>
+              <div class="rule-desc">Extract repeated UI into <code class="ic ic-accent">@ViewBuilder private func rowView(...)</code> before promoting to a new file</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Android Standards -->
+        <div class="platform-content android-only" style="display:none">
+          <div class="rule-head">Naming rules</div>
+          <div class="rule-list">
+            <div class="rule-item">
+              <div class="rule-title">Composables — PascalCase noun phrase, no "Composable" suffix</div>
+              <div class="rule-desc">Use <code class="ic ic-accent">TransactionRow</code>, not <code class="ic ic-muted">TransactionRowComposable</code></div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">ViewModels — "ViewModel" suffix</div>
+              <div class="rule-desc"><code class="ic ic-accent">TransactionViewModel</code> owns the UiState; screens call <code class="ic ic-accent">collectAsStateWithLifecycle()</code></div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">UiState — data class with "UiState" suffix</div>
+              <div class="rule-desc"><code class="ic ic-accent">TransactionUiState</code> with <code class="ic ic-accent">isLoading</code>, <code class="ic ic-accent">transactions</code>, <code class="ic ic-accent">errorMessage</code></div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">Screen vs Component separation</div>
+              <div class="rule-desc"><code class="ic ic-accent">TransactionScreen</code> takes ViewModel; <code class="ic ic-accent">TransactionContent</code> is stateless and previewable</div>
+            </div>
+          </div>
+
+          <div class="rule-head">Do / Don't</div>
+          <div class="do-dont">
+            <div class="do-card">
+              <div class="dd-label">✓ do</div>
+              <pre><span class="kw">data class</span> <span class="ty">TransactionUiState</span>(
+  <span class="kw">val</span> isLoading: <span class="ty">Boolean</span> = <span class="nu">false</span>,
+  <span class="kw">val</span> error: <span class="ty">String</span>? = <span class="nu">null</span>
+)
+<span class="kw">val</span> ui <span class="kw">by</span> vm.uiState
+  .<span class="fn">collectAsStateWithLifecycle</span>()</pre>
+            </div>
+            <div class="dont-card">
+              <div class="dd-label">✗ don't</div>
+              <pre><span class="cm">// mutable var, not StateFlow</span>
+<span class="kw">var</span> isLoading = <span class="nu">false</span>
+
+<span class="cm">// LiveData instead of StateFlow</span>
+<span class="kw">val</span> data: <span class="ty">LiveData</span>&lt;<span class="ty">List</span>&lt;<span class="ty">Tx</span>&gt;&gt;</pre>
+            </div>
+          </div>
+
+          <div class="rule-head">File structure</div>
+          <div class="edu-code-card">
+            <div class="edu-code-header">
+              <span class="edu-code-filename">Recommended layout</span>
+              <span class="lang-badge badge-and">Kotlin</span>
+            </div>
+            <div class="edu-code-body"><span class="cm">// app/src/main/java/com.example/</span>
+<span class="cm">//  ├── core/           → utilities, extensions</span>
+<span class="cm">//  ├── data/           → repository, data sources</span>
+<span class="cm">//  ├── domain/         → use cases, models</span>
+<span class="cm">//  ├── ui/screens/</span>
+<span class="cm">//  │    └── transaction/</span>
+<span class="cm">//  │         ├── TransactionScreen.kt</span>
+<span class="cm">//  │         ├── TransactionViewModel.kt</span>
+<span class="cm">//  │         └── TransactionUiState.kt</span>
+<span class="cm">//  └── di/             → Hilt modules</span></div>
+          </div>
+
+          <div class="rule-head">Key patterns</div>
+          <div class="rule-list">
+            <div class="rule-item">
+              <div class="rule-title">collectAsStateWithLifecycle() — not collectAsState()</div>
+              <div class="rule-desc">Stops collecting when the composable leaves composition, preventing background leaks</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">Hoisted state — screens stateful, content stateless</div>
+              <div class="rule-desc"><code class="ic ic-accent">TransactionScreen</code> collects from ViewModel; <code class="ic ic-accent">TransactionContent(uiState, onRetry)</code> is pure</div>
+            </div>
+            <div class="rule-item">
+              <div class="rule-title">rememberSaveable for ephemeral UI state</div>
+              <div class="rule-desc">Search query, scroll position — <code class="ic ic-accent">rememberSaveable</code> survives process death</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ARCHITECTURE ══ -->
+      <div id="section-arch" class="content-section" style="display:none">
+        <div class="section-eyebrow">Architecture</div>
+        <h1 class="section-title" id="arch-title">MVVM — SwiftUI</h1>
+        <p class="section-sub">Separation of concerns for testable, scalable apps</p>
+
+        <!-- iOS -->
+        <div class="platform-content ios-only">
+          <div class="rule-head">ViewModel</div>
+          <div class="edu-code-card">
+            <div class="edu-code-header">
+              <span class="edu-code-filename">TransactionViewModel.swift</span>
+              <div style="display:flex;gap:8px;align-items:center">
+                <span class="lang-badge badge-ios">Swift</span>
+                <button class="icon-btn copy-arch-btn" data-target="arch-ios-vm" aria-label="Copy">
+                  <i class="ti ti-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="edu-code-body" id="arch-ios-vm"><span class="kw">@MainActor</span>
+<span class="kw">final class</span> <span class="ty">TransactionViewModel</span>: <span class="ty">ObservableObject</span> {
+
+    <span class="kw">@Published</span> <span class="kw">var</span> transactions: [<span class="ty">Transaction</span>] = []
+    <span class="kw">@Published</span> <span class="kw">var</span> isLoading = <span class="nu">false</span>
+    <span class="kw">@Published</span> <span class="kw">var</span> errorMessage: <span class="ty">String</span>?
+
+    <span class="kw">private let</span> service: <span class="ty">TransactionServiceProtocol</span>
+
+    <span class="kw">init</span>(service: <span class="ty">TransactionServiceProtocol</span>) {
+        <span class="kw">self</span>.service = service   <span class="cm">// injected → testable</span>
+    }
+
+    <span class="kw">func</span> <span class="fn">fetchTransactions</span>() <span class="kw">async</span> {
+        isLoading = <span class="nu">true</span>
+        <span class="kw">defer</span> { isLoading = <span class="nu">false</span> }
+        <span class="kw">do</span> {
+            transactions = <span class="kw">try await</span> service.<span class="fn">fetch</span>()
+        } <span class="kw">catch</span> {
+            errorMessage = error.localizedDescription
+        }
+    }
+}</div>
+          </div>
+
+          <div class="rule-head">View binding</div>
+          <div class="edu-code-card">
+            <div class="edu-code-header">
+              <span class="edu-code-filename">TransactionList.swift</span>
+              <div style="display:flex;gap:8px;align-items:center">
+                <span class="lang-badge badge-ios">Swift</span>
+                <button class="icon-btn copy-arch-btn" data-target="arch-ios-view" aria-label="Copy">
+                  <i class="ti ti-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="edu-code-body" id="arch-ios-view"><span class="kw">struct</span> <span class="ty">TransactionList</span>: <span class="ty">View</span> {
+    <span class="kw">@StateObject private var</span> viewModel = <span class="ty">TransactionViewModel</span>(
+        service: <span class="ty">TransactionService</span>()
+    )
+
+    <span class="kw">var</span> body: <span class="kw">some</span> <span class="ty">View</span> {
+        <span class="ty">List</span>(viewModel.transactions) { tx <span class="kw">in</span>
+            <span class="ty">TransactionRow</span>(transaction: tx)
+        }
+        .overlay { <span class="kw">if</span> viewModel.isLoading { <span class="ty">ProgressView</span>() } }
+        .task { <span class="kw">await</span> viewModel.<span class="fn">fetchTransactions</span>() }
+        .alert(<span class="st">"Error"</span>, isPresented: .constant(viewModel.errorMessage != <span class="nu">nil</span>)) {
+            <span class="ty">Button</span>(<span class="st">"OK"</span>) { viewModel.errorMessage = <span class="nu">nil</span> }
+        }
+    }
+}</div>
+          </div>
+        </div>
+
+        <!-- Android -->
+        <div class="platform-content android-only" style="display:none">
+          <div class="rule-head">UiState + ViewModel</div>
+          <div class="edu-code-card">
+            <div class="edu-code-header">
+              <span class="edu-code-filename">TransactionViewModel.kt</span>
+              <div style="display:flex;gap:8px;align-items:center">
+                <span class="lang-badge badge-and">Kotlin</span>
+                <button class="icon-btn copy-arch-btn" data-target="arch-and-vm" aria-label="Copy">
+                  <i class="ti ti-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="edu-code-body" id="arch-and-vm"><span class="kw">data class</span> <span class="ty">TransactionUiState</span>(
+    <span class="kw">val</span> transactions: <span class="ty">List</span>&lt;<span class="ty">Transaction</span>&gt; = <span class="fn">emptyList</span>(),
+    <span class="kw">val</span> isLoading: <span class="ty">Boolean</span> = <span class="nu">false</span>,
+    <span class="kw">val</span> errorMessage: <span class="ty">String</span>? = <span class="nu">null</span>
+)
+
+<span class="kw">@HiltViewModel</span>
+<span class="kw">class</span> <span class="ty">TransactionViewModel</span> <span class="kw">@Inject constructor</span>(
+    <span class="kw">private val</span> repository: <span class="ty">TransactionRepository</span>
+) : <span class="ty">ViewModel</span>() {
+
+    <span class="kw">private val</span> _uiState = <span class="fn">MutableStateFlow</span>(<span class="ty">TransactionUiState</span>())
+    <span class="kw">val</span> uiState: <span class="ty">StateFlow</span>&lt;<span class="ty">TransactionUiState</span>&gt; = _uiState.<span class="fn">asStateFlow</span>()
+
+    <span class="kw">fun</span> <span class="fn">fetchTransactions</span>() {
+        viewModelScope.<span class="fn">launch</span> {
+            _uiState.<span class="fn">update</span> { it.<span class="fn">copy</span>(isLoading = <span class="nu">true</span>) }
+            repository.<span class="fn">getTransactions</span>()
+                .<span class="fn">onSuccess</span> { txs ->
+                    _uiState.<span class="fn">update</span> { it.<span class="fn">copy</span>(transactions = txs, isLoading = <span class="nu">false</span>) }
+                }
+                .<span class="fn">onFailure</span> { e ->
+                    _uiState.<span class="fn">update</span> { it.<span class="fn">copy</span>(errorMessage = e.message, isLoading = <span class="nu">false</span>) }
+                }
+        }
+    }
+}</div>
+          </div>
+
+          <div class="rule-head">Screen composable</div>
+          <div class="edu-code-card">
+            <div class="edu-code-header">
+              <span class="edu-code-filename">TransactionScreen.kt</span>
+              <div style="display:flex;gap:8px;align-items:center">
+                <span class="lang-badge badge-and">Kotlin</span>
+                <button class="icon-btn copy-arch-btn" data-target="arch-and-screen" aria-label="Copy">
+                  <i class="ti ti-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <div class="edu-code-body" id="arch-and-screen"><span class="kw">@Composable</span>
+<span class="kw">fun</span> <span class="fn">TransactionScreen</span>(
+    viewModel: <span class="ty">TransactionViewModel</span> = <span class="fn">hiltViewModel</span>()
+) {
+    <span class="kw">val</span> uiState <span class="kw">by</span> viewModel.uiState
+        .<span class="fn">collectAsStateWithLifecycle</span>()
+
+    <span class="ty">LaunchedEffect</span>(<span class="ty">Unit</span>) { viewModel.<span class="fn">fetchTransactions</span>() }
+
+    <span class="fn">TransactionContent</span>(
+        uiState = uiState,
+        onRetry = viewModel::<span class="fn">fetchTransactions</span>
+    )
+}
+
+<span class="kw">@Composable</span>
+<span class="kw">private fun</span> <span class="fn">TransactionContent</span>(   <span class="cm">// stateless → previewable</span>
+    uiState: <span class="ty">TransactionUiState</span>,
+    onRetry: () -> <span class="ty">Unit</span>
+) {
+    <span class="kw">if</span> (uiState.isLoading) <span class="ty">CircularProgressIndicator</span>()
+    <span class="kw">else</span> <span class="ty">LazyColumn</span> {
+        <span class="fn">items</span>(uiState.transactions) { <span class="fn">TransactionRow</span>(it) }
+    }
+}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CODE REVIEW ══ -->
+      <div id="section-review" class="content-section" style="display:none">
+        <div class="section-eyebrow">Quality</div>
+        <h1 class="section-title">Code review checklist</h1>
+        <p class="section-sub">What to look for before approving a PR</p>
+
+        <div class="rule-head">Review layers</div>
+        <div class="rule-list">
+          <div class="rule-item">
+            <div class="rule-title">1 · Correctness first</div>
+            <div class="rule-desc">Does it compile? Are edge cases (empty, error, loading) handled? No force-unwraps in production paths.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-title">2 · Architecture compliance</div>
+            <div class="rule-desc">Business logic in ViewModel, not in View. No direct API calls from a View body.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-title">3 · Naming &amp; readability</div>
+            <div class="rule-desc">Would a junior reading this file tomorrow understand every identifier without the PR description?</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-title">4 · Performance signals</div>
+            <div class="rule-desc" id="review-perf">No unnecessary redraws. Heavy work off the main thread. Pagination for lists &gt; 50 items.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-title">5 · Test coverage</div>
+            <div class="rule-desc" id="review-test">At minimum, ViewModel unit tests for happy path + error path. UI tests for critical flows.</div>
+          </div>
+        </div>
+
+        <div class="rule-head">Quick checklist</div>
+        <div class="checklist-grid">
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span id="chk-1">No @State for server data — use @Published in ViewModel</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span>Empty, loading &amp; error states all handled</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span id="chk-2">No business logic in View body</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span>Dark mode &amp; different text sizes tested</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span id="chk-3">async/await used for all network calls</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span>Destructive actions have confirmation dialog</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span id="chk-4">ViewModel unit tested</span></div>
+          <div class="check-item"><i class="ti ti-square-check check-icon" aria-hidden="true"></i><span>No hardcoded strings — use localisation</span></div>
+        </div>
+
+        <div class="rule-head">Red flags — instant reject</div>
+        <div class="rule-list">
+          <div class="rule-item danger-item">
+            <div class="rule-title" id="reject-1">Force-unwrap (!) on optional that could be nil in production</div>
+            <div class="rule-desc">Use <code class="ic ic-accent">guard let</code>, <code class="ic ic-accent">if let</code>, or <code class="ic ic-accent">??</code> with a meaningful default</div>
+          </div>
+          <div class="rule-item danger-item">
+            <div class="rule-title">API call directly inside a View body or init()</div>
+            <div class="rule-desc" id="reject-2-desc">Move to <code class="ic ic-accent">.task</code> modifier or ViewModel's <code class="ic ic-accent">fetchOnLoad()</code></div>
+          </div>
+          <div class="rule-item danger-item">
+            <div class="rule-title">Hardcoded secrets or API keys in source files</div>
+            <div class="rule-desc" id="reject-3-desc">Use env variables, <code class="ic ic-accent">.xcconfig</code> / <code class="ic ic-accent">BuildConfig</code>, or a secrets manager</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast -->
   <div class="toast" id="toast">
-    <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M3 8l3.5 3.5 6.5-7" stroke="#27c93f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 16 16" fill="none" width="14" height="14" aria-hidden="true">
+      <path d="M3 8l3.5 3.5 6.5-7" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
     Copied to clipboard!
   </div>
 
